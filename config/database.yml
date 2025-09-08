@@ -81,9 +81,12 @@ test:
 production:
   primary: &primary_production
     <<: *default
-    database: cash_register_ardeearam_dev_production
-    username: cash_register_ardeearam_dev
-    password: <%= ENV["CASH_REGISTER_ARDEEARAM_DEV_DATABASE_PASSWORD"] %>
+    host: <%= ENV["DB_HOST"] %>
+    database: <%= ENV["DB_DATABASE"] %>
+    username: <%= ENV["DB_USERNAME"] %>
+    password: <%= ENV["DB_PASSWORD"] %>
+    pool: 1
+    checkout_timeout: 5 
   cache:
     <<: *primary_production
     database: cash_register_ardeearam_dev_production_cache
