@@ -11,4 +11,8 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   root "front_page#index"
+
+  resources :baskets do
+    resources :product_items
+  end
 end
