@@ -35,5 +35,28 @@ class BasketTest < ActiveSupport::TestCase
     basket = Basket.find(basket_id)
     basket.add(@cf1)
     assert_equal 14.34, basket.total_price
+
+    basket = Basket.find(basket_id)
+    basket.add(@sr1)
+    assert_equal 19.34, basket.total_price
+
+    basket = Basket.find(basket_id)
+    basket.add(@cf1)
+    assert_equal 30.57, basket.total_price
+
+    basket = Basket.find(basket_id)
+    basket.add(@cf1)
+    assert_equal 30.57, basket.total_price
+
+    #Green tea buy one take one
+    basket = Basket.find(basket_id)
+    basket.add(@gr1)
+    assert_equal 30.57, basket.total_price
+
+    #Green tea not free anymore
+    basket = Basket.find(basket_id)
+    basket.add(@gr1)
+    assert_equal 33.68, basket.total_price
+
   end
 end
