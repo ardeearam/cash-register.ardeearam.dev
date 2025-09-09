@@ -23,7 +23,10 @@ class Basket < ApplicationRecord
   end
 
   add_rule :bulk_discount_for_strawberries do |product_items|
-    #TODO
+    strawberry_product_items = product_items.joins(:product).where(product:{code: "SR1"})
+    if strawberry_product_items.count >= 3
+      strawberry_product_items.update_all(price_with_discount: 4.50)
+    end
   end
 
 
