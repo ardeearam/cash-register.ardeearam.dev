@@ -3,7 +3,7 @@ class Basket
   attr_reader :product_items
 
   #Declare pricing rules here
-  
+
   add_rule :buy_one_get_one_green_tea do |product_items|
     take_one = false
     product_items.each do |product_item|
@@ -27,7 +27,7 @@ class Basket
 
   def add(product)
     product_item = ProductItem.create!(product: product)
-    product_items << product_item
+    @product_items << product_item
   end
 
   def total_price

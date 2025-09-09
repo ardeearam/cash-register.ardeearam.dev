@@ -11,7 +11,7 @@ class BasketTest < ActiveSupport::TestCase
 
 
      [
-      #{contents: [gr1, sr1, gr1, gr1, cf1], expected_price: 22.45},
+      {contents: [gr1, sr1, gr1, gr1, cf1], expected_price: 22.45},
       {contents: [gr1, gr1], expected_price: 3.11},
       #{contents: [sr1, sr1, gr1, sr1], expected_price: 16.61},
       #{contents: [gr1, cf1, sr1, cf1, cf1], expected_price: 30.57}
