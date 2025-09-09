@@ -2,8 +2,6 @@ class Basket < ApplicationRecord
   extend CollectionRuleManager  
   has_many :product_items
 
-
-
   #Declare pricing rules here
 
   add_rule :buy_one_get_one_green_tea do |product_items|
@@ -29,6 +27,13 @@ class Basket < ApplicationRecord
     end
   end
 
+  add_rule :bulk_discount_for_coffee_two_thirds do |product_items|
+    coffee_product_items = product_items.joins(:product).where(product:{code: "CF1"})
+    if coffee_product_items.count >= 3
+      #Intermediate results: 4 decimal places
+      coffee_product_items.update_all(price_with_discount: ((BigDecimal(coffee_product_items.first.product.price.to_s) * 2) / 3).round(4))
+    end
+  end
 
 
   def add(product)
@@ -41,7 +46,7 @@ class Basket < ApplicationRecord
       rule.call(product_items)
     end
 
-
-    product_items.sum(&:price_with_discount)
+    #Final result: 2 decimal places
+    product_items.sum{|item| BigDecimal(item.price_with_discount.to_s)}.round(2)
   end
 end

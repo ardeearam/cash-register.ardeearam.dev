@@ -1,7 +1,7 @@
 require "test_helper"
 
 class BasketTest < ActiveSupport::TestCase
-  test "#total_price" do
+  test "#total_price must match expected values" do
 
 
      gr1 = Product.create!(code: "GR1", name: "Green Tea", price: 3.11)
@@ -12,17 +12,14 @@ class BasketTest < ActiveSupport::TestCase
      [
       {contents: [gr1, sr1, gr1, gr1, cf1], expected_price: 22.45},
       {contents: [gr1, gr1], expected_price: 3.11},
-      {contents: [sr1, sr1, gr1, sr1], expected_price: 16.61}
-      #{contents: [gr1, cf1, sr1, cf1, cf1], expected_price: 30.57}
+      {contents: [sr1, sr1, gr1, sr1], expected_price: 16.61},
+      {contents: [gr1, cf1, sr1, cf1, cf1], expected_price: 30.57}
      ].each do |basket_expectation|
 
         basket = Basket.create!
         basket_expectation[:contents].each{|product| basket.add(product)}
         assert_equal basket_expectation[:expected_price], basket.total_price
-
      end
-
-
 
   end
 end
