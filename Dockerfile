@@ -35,7 +35,7 @@ RUN apt-get update -qq && \
 
 # Install Node + Yarn
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
-  && apt-get install -y nodejs npm \
+  && apt-get install -y nodejs \
   && npm install -g yarn
 
 # Install application gems
