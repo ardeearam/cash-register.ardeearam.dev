@@ -5,14 +5,6 @@ class ProductItemsController < ApplicationController
   def create
     product = Product.find_by_code!(product_code_params[:product_code])
     @basket.add(product)
-    render json: {
-      basket: {
-        id: @basket.id,
-        product_items: @basket.product_items,
-        total_price: @basket.total_price
-      }
-
-    }
   end
 
   private
