@@ -59,4 +59,19 @@ class BasketTest < ActiveSupport::TestCase
     assert_equal 33.68, basket.total_price
 
   end
+
+  test "#total_price works with any order" do
+
+     [
+      {contents: [@gr1, @cf1,  @gr1, @gr1, @sr1,], expected_price: 22.45},
+      {contents: [@gr1, @sr1, @sr1 , @sr1], expected_price: 16.61},
+      {contents: [@cf1, @gr1, @sr1, @cf1, @cf1], expected_price: 30.57}
+     ].each do |basket_expectation|
+
+        basket = Basket.create!
+        basket_expectation[:contents].each{|product| basket.add(product)}
+        assert_equal basket_expectation[:expected_price], basket.total_price
+     end
+
+  end  
 end
