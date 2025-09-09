@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from "react";
+import React, {useCallback, useState, useEffect} from "react";
 
 export default function App({csrfToken, basketId}) {
 
@@ -73,6 +73,20 @@ export default function App({csrfToken, basketId}) {
     })();
     
   }, [basketId, csrfToken]);  
+
+  useEffect(() => {
+
+    (async () => {
+      const response = await fetch(`/baskets/${basketId}.json`, {
+        method: 'GET'
+      });
+      const responseJson = await response.json();
+      const {total_price, product_items} = responseJson.basket;
+      setRunningTotal(total_price);
+      setProductCodes(product_items.map(item => item.product_code));
+    })();
+
+  }, []);
 
   return (
     <div className="mx-auto w-3/4">

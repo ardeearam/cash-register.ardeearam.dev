@@ -1,8 +1,11 @@
 class BasketsController < ApplicationController
 
-  before_action :set_basket, only:  [:destroy]
+  before_action :set_basket, only:  [:destroy, :show]
 
   def create
+  end
+
+  def show
   end
 
   #For now, let's use "destroy"
