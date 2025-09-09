@@ -1,16 +1,19 @@
-class Basket
-  extend CollectionRuleManager
-  attr_reader :product_items
+class Basket < ApplicationRecord
+  extend CollectionRuleManager  
+  has_many :product_items
+
+
 
   #Declare pricing rules here
 
   add_rule :buy_one_get_one_green_tea do |product_items|
     take_one = false
-    product_items.each do |product_item|
+    green_tea_product_items = product_items.joins(:product).where(product:{code: "GR1"})
+    green_tea_product_items.each do |product_item|
       product = product_item.product
-      next if product.code != "GR1"
       if take_one 
         product_item.price_with_discount = 0
+        product_item.save!
         take_one = false
       else  
         #Next one is free
@@ -19,15 +22,14 @@ class Basket
     end
   end
 
-
-
-  def initialize
-    @product_items = []
+  add_rule :bulk_discount_for_strawberries do |product_items|
+    #TODO
   end
 
+
+
   def add(product)
-    product_item = ProductItem.create!(product: product)
-    @product_items << product_item
+    product_items << ProductItem.new(product: product, basket: self, price_with_discount: product.price)
   end
 
   def total_price
