@@ -15,4 +15,6 @@ Rails.application.routes.draw do
   resources :baskets do
     resources :product_items
   end
+
+  resources :products, only: [:index]
 end

@@ -4,6 +4,7 @@ export default function App({csrfToken, basketId}) {
 
   const [runningTotal, setRunningTotal] = useState("0");
   const [productCodes, setProductCodes] = useState([]);
+  const [products, setProducts] = useState([]);
 
   const actionForProductCode = (code) => {
     return async () => {
@@ -27,36 +28,19 @@ export default function App({csrfToken, basketId}) {
     };
   }
 
+  const onClickProduct = useCallback((productCode) => {
 
-  const onClickGR1 = useCallback(() => {
-    
-    (async () => {
-      const action = actionForProductCode('GR1');
-      const response = await action();
-    })();
-    
-  }, [basketId, csrfToken]);
+    return (evt) => {
+      (async () => {
+        const action = actionForProductCode(productCode);
+        const response = await action();
+      })();
+    }
 
-  const onClickSR1 = useCallback(() => {
-    
-    (async () => {
-      const action = actionForProductCode('SR1');
-      const response = await action();
-    })();
-    
-  }, [basketId, csrfToken]);
-
-  const onClickCF1 = useCallback(() => {
-    
-    (async () => {
-      const action = actionForProductCode('CF1');
-      const response = await action();
-    })();
-    
-  }, [basketId, csrfToken]);  
+  }, []);
 
 
-    const onClickClearAll = useCallback(() => {
+  const onClickClearAll = useCallback(() => {
     
     (async () => {
       const response = await fetch(`/baskets/${basketId}.json`, {
@@ -74,6 +58,7 @@ export default function App({csrfToken, basketId}) {
     
   }, [basketId, csrfToken]);  
 
+  //Get current basket content
   useEffect(() => {
 
     (async () => {
@@ -88,6 +73,19 @@ export default function App({csrfToken, basketId}) {
 
   }, []);
 
+  //Get available products
+  useEffect(() => {
+    (async () => {
+      const response = await fetch(`/products.json`, {
+        method: 'GET'
+      });
+      const responseJson = await response.json();
+      const products = responseJson.products;
+      setProducts(products);
+
+    })();
+  }, []);
+
   return (
     <div className="mx-auto w-3/4">
       <h1 className="block text-2xl">Cash Register</h1>
@@ -96,9 +94,10 @@ export default function App({csrfToken, basketId}) {
       </div>
       <div className="h-20 rounded-md w-full text-3xl"> = €{Number(runningTotal).toFixed(2)}</div>
       <div>
-        <button onClick={onClickGR1} className="bg-blue-400 text-white cursor-pointer p-3 m-2 rounded-full">GR1 - Green Tea</button>
-        <button onClick={onClickSR1} className="bg-blue-400 text-white cursor-pointer p-3 m-2 rounded-full">SR1 - Strawberries</button>
-        <button onClick={onClickCF1} className="bg-blue-400 text-white cursor-pointer p-3 m-2 rounded-full">CF1 - Coffee</button>
+
+        {products.map((product) => (          
+          <button key={product.code} onClick={onClickProduct(product.code)} className="bg-blue-400 text-white cursor-pointer p-3 m-2 rounded-full">{product.code} - {product.name}</button>
+        ))}
         <button onClick={onClickClearAll} className="bg-blue-400 text-white cursor-pointer p-3 m-2 rounded-full">CLEAR ALL</button>
       </div>
     </div>   
